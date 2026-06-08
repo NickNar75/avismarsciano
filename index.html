@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Il Corpo e il Sangue - AVIS</title>
+    <link rel="stylesheet" href="css/stile.css">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#e30513">
+    <meta name="mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="AVIS Corpo e Sangue">
+    <meta name="robots" content="noindex,nofollow">
+</head>
+<body>
+    <!-- TESTATA FISSA -->
+    <header id="main-header">
+        <div class="logo-container">
+            <img src="img/avis-marsciano-logo.png" alt="Logo AVIS" id="logo-avis">
+        </div>
+        <div class="title-container">
+            <h1 id="titolo-scheda">Il Corpo e il Sangue</h1>
+        </div>
+        <div class="logo-container logo-right">
+            <img src="img/imgSecondoCircoloMarsciano.png" alt="Marsciano - Direzione Didattica II Circolo" id="nome-scuola">
+        </div>
+    </header>
+
+    <!-- CONTENITORE DINAMICO — il canvas SVG è DENTRO qui, così le coordinate sono corrette -->
+    <main id="app-container">
+        <!-- Il canvas SVG viene iniettato da JS qui dentro, come primo figlio -->
+    </main>
+
+    <!-- FOOTER CON NAVIGAZIONE -->
+    <footer id="main-footer">
+		<button id="btn-prev" class="btn-nav" disabled>&#9664; Indietro</button>
+		<div id="footer-center">
+			<div id="progress-bar">Scheda 1 di 6</div>
+			<div id="app-version">ver. beta 0.2</div>
+		</div>
+		<button id="btn-next" class="btn-nav">Avanti &#9654;</button>
+	</footer>
+
+    <script src="js/app.js"></script>
+    <script>
+        // Registrazione Service Worker (PWA offline-first)
+		if ('serviceWorker' in navigator) {
+
+			// Guardia anti-loop: ricarica una sola volta
+			let swReloading = false;
+			navigator.serviceWorker.addEventListener('controllerchange', () => {
+				if (swReloading) return;
+				swReloading = true;
+				console.log('[SW] Nuovo SW attivo — ricarico la pagina');
+				window.location.reload();
+			});
+
+			window.addEventListener('load', () => {
+				// updateViaCache: 'none' forza il browser a scaricare sempre
+				// il file service-worker.js dalla rete, ignorando la cache HTTP
+				navigator.serviceWorker.register('./service-worker.js', {
+					updateViaCache: 'none'
+				})
+				.then(reg => {
+					console.log('[SW] Registrato:', reg.scope);
+
+					// SW già in attesa (app era aperta) — attivalo subito
+					if (reg.waiting) {
+						reg.waiting.postMessage({ type: 'SKIP_WAITING' });
+					}
+
+					// Nuovo SW che si installa mentre la pagina è aperta
+					reg.addEventListener('updatefound', () => {
+						const newWorker = reg.installing;
+						newWorker.addEventListener('statechange', () => {
+							if (newWorker.state === 'installed' &&
+								navigator.serviceWorker.controller) {
+								newWorker.postMessage({ type: 'SKIP_WAITING' });
+							}
+						});
+					});
+				})
+				.catch(err => console.warn('[SW] Registrazione fallita:', err));
+			});
+		}
+    </script>
+</body>
+</html>
