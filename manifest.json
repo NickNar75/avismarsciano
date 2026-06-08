@@ -1,0 +1,22 @@
+{
+  "name": "Il Corpo e il Sangue - AVIS",
+  "short_name": "AVIS Didattica",
+  "description": "Percorso educativo interattivo AVIS per le classi quinte della scuola primaria",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#E7F2FC",
+  "theme_color": "#e30513",
+  "icons": [
+    {
+      "src": "img/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "img/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
