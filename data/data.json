@@ -1,0 +1,128 @@
+{
+  "progetto": "Il Corpo e il Sangue",
+  "schede": [
+    {
+      "id": 1,
+      "titolo": "L'importanza del dono",
+	  "icona": "💪",
+      "tipo": "text-text",
+      "coppie": [
+        { "id_q": "q1_1", "domanda": "Perchè è importante donare il sangue?", "risposta": "Perchè il sangue non può essere prodotto artificialmente e serve per interventi chirurgici, emergenze, malattie e terapie" },
+        { "id_q": "q1_2", "domanda": "Cosa significa \"donare il sangue\"?", "risposta": "Donare il sangue significa offrire volontariamente una parte del proprio sangue a chi ne ha bisogno" },
+        { "id_q": "q1_3", "domanda": "Cosa succede al sangue donato?", "risposta": "Viene analizzato, diviso nei suoi componenti (globuli rossi, plasma, piastrine) e conservato per essere utilizzato quando necessario" },
+        { "id_q": "q1_4", "domanda": "Chi può donare il sangue?", "risposta": "Persone sane tra i 18 e i 65 anni (con alcune eccezioni) con un peso minimo di 50 kg e che rispettano determinati criteri di salute" }
+      ],
+      "distrattori": []
+    },
+    {
+      "id": 2,
+      "titolo": "La donazione",
+	  "icona": "🩸",
+      "tipo": "text-text",
+      "coppie": [
+        { "id_q": "q2_1", "domanda": "Quanto sangue viene prelevato durante una donazione?", "risposta": "Circa 450 millilitri, una quantità che il corpo umano è in grado di ricostruire rapidamente" },
+        { "id_q": "q2_2", "domanda": "Quali sono i benefici della donazione di sangue?", "risposta": "Aiuta a salvare vite, stimola il rinnovamento delle cellule del sangue, permette di tenere sotto controllo la propria salute, esami gratuiti" },
+        { "id_q": "q2_3", "domanda": "Ogni quanto tempo si può donare il sangue?", "risposta": "Le donne possono donare ogni 6 mesi, gli uomini ogni 3 mesi" },
+        { "id_q": "q2_4", "domanda": "Cosa significa solidarietà quando si dona il sangue?", "risposta": "Significa compiere un gesto altruistico e gratuito per aiutare il prossimo senza chiedere nulla in cambio" }
+      ],
+      "distrattori": []
+    },
+    {
+      "id": 3,
+      "titolo": "Dove e come donare",
+	  "icona": "❓",
+      "tipo": "text-text",
+      "coppie": [
+        { "id_q": "q3_1", "domanda": "Dove si può donare il sangue?", "risposta": "Presso i centri trasfusionali degli ospedali o alle associazioni di donatori di sangue" },
+        { "id_q": "q3_2", "domanda": "Cosa si può fare per incoraggiare altre persone a donare il sangue?", "risposta": "Informare, sensibilizzare, condividere la propria esperienza e partecipare a campagne di promozione della donazione" },
+        { "id_q": "q3_3", "domanda": "Cosa significa AVIS?", "risposta": "Associazione Volontari Italiani Sangue" }
+      ],
+      "distrattori": []
+    },
+    {
+      "id": 4,
+      "titolo": "I componenti del sangue",
+	  "icona": "🔬",
+      "tipo": "text-text",
+      "coppie": [
+        { "id_q": "q4_1", "domanda": "Quale è la funzione dei globuli rossi?", "risposta": "Trasportare ossigeno dai polmoni ai tessuti e anidride carbonica dai tessuti ai polmoni" },
+        { "id_q": "q4_2", "domanda": "Qual'è la funzione principale dei globuli bianchi?", "risposta": "Difendere l'organismo da infezioni e malattie" },
+        { "id_q": "q4_3", "domanda": "Qual'è una delle funzioni principali del plasma sanguigno?", "risposta": "Trasportare ormoni, nutrienti, proteine e prodotti di scarto in tutto il corpo" }
+      ],
+      "distrattori": [
+        "Produrre anticorpi",
+        "Trasportare ossigeno ai tessuti",
+        "Sono la componente cellulare responsabile della coagulazione del sangue"
+      ]
+    },
+    {
+      "id": 5,
+      "titolo": "I componenti del cuore",
+	  "icona": "🫀",
+      "tipo": "text-image",
+      "immagine_bg": "img/cuore-bg.png",
+      "elementi": [
+		  {
+			"id_hotspot": "h_vena_cava",
+			"testo": "La Vena Cava",
+			"hotspot": { "shape": "rect", "visible": true, "color": "#0055CC",
+						 "x": 20, "y": 3, "w": 17, "h": 29 }
+		  },
+		  {
+			"id_hotspot": "h_aorta",
+			"testo": "L'Aorta",
+			"hotspot": { "shape": "rect", "visible": true, "color": "#CC0000",
+						 "x": 39, "y": 0, "w": 34, "h": 14 }
+		  },
+		  {
+			"id_hotspot": "h_arterie_polmonari",
+			"testo": "Arteria Polmonare",
+			"hotspot": { "shape": "rect", "visible": true, "color": "#0055CC",
+						 "x": 47, "y": 15, "w": 41, "h": 11 }
+		  },
+		  {
+			"id_hotspot": "h_vene_polmonari",
+			"testo": "Le Vene Polmonari",
+			"hotspot": { "shape": "rect", "visible": true, "color": "#CC0000",
+						 "x": 76, "y": 27, "w": 23, "h": 15 }
+		  },
+		  {
+			"id_hotspot": "h_ventricolo_dx",
+			"testo": "Il Ventricolo Destro",
+			"hotspot": { "shape": "rect", "visible": true, "color": "#0055CC",
+						 "x": 25, "y": 50, "w": 30, "h": 38 }
+		  },
+		  {
+			"id_hotspot": "h_ventricolo_sx",
+			"testo": "Il Ventricolo Sinistro",
+			"hotspot": { "shape": "rect", "visible": true, "color": "#CC0000",
+						 "x": 57, "y": 48, "w": 34, "h": 40 }
+		  }
+		]
+    },
+    {
+      "id": 6,
+      "titolo": "Le vie della circolazione",
+	  "icona": "🔄",
+      "tipo": "text-image",
+      "immagine_bg": "img/circolazione-bg.png",
+      "elementi": [
+        {
+          "id_hotspot": "h_arterie",
+          "testo": "Le Arterie",
+          "hotspot": { "shape": "circle", "visible": true, "color": "#CC0000", "cx": 53, "cy": 38, "r": 6 }
+        },
+        {
+          "id_hotspot": "h_vene",
+          "testo": "Le Vene",
+          "hotspot": { "shape": "circle", "visible": true, "color": "#0055CC", "cx": 35, "cy": 55, "r": 6 }
+        },
+        {
+          "id_hotspot": "h_capillari",
+          "testo": "I Capillari",
+          "hotspot": { "shape": "circle", "visible": true, "color": "#9933AA", "cx": 86, "cy": 50, "r": 6 }
+        }
+      ]
+    }
+  ]
+}

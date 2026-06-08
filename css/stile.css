@@ -1,0 +1,947 @@
+/* WATERMARK PRE-RILASCIO — rimuovere dopo pagamento */
+#watermark-test {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(-35deg);
+    font-size: clamp(3rem, 8vw, 6rem);
+    font-weight: 900;
+    color: rgba(227, 5, 19, 0.12);
+    pointer-events: none;
+    z-index: 9999;
+    white-space: nowrap;
+    letter-spacing: 8px;
+    user-select: none;
+}
+
+/* =========================================================
+   AVIS - Il Corpo e il Sangue
+   CSS — Versione ottimizzata per tablet scolastici
+   ========================================================= */
+
+/* --- VARIABILI COLORI --- */
+:root {
+    --avis-red:      #e30513;
+    --avis-blue:     #0075BF;
+    --bg-light:      #E7F2FC;
+    --success-green: #4CAF50;
+    --text-dark:     #333333;
+    --header-h:      82px;
+    --footer-h:      64px;
+}
+
+/* --- RESET BASE --- */
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    /* Evita selezione accidentale del testo da parte dei bambini */
+    -webkit-user-select: none;
+    user-select: none;
+    /* Rimuove il tap-highlight blu su mobile/tablet */
+    -webkit-tap-highlight-color: transparent;
+}
+
+html, body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden; /* La pagina NON scrolla mai: tutto è contenuto */
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--bg-light);
+    color: var(--text-dark);
+    display: flex;
+    flex-direction: column;
+}
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+#main-header {
+    flex-shrink: 0;               /* Non si restringe mai */
+    height: var(--header-h);
+    background-color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 10px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.12);
+    border-bottom: 2px solid var(--avis-red);
+    z-index: 20;
+}
+
+.logo-container {
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+}
+
+.title-container {
+    flex: 1;
+    text-align: center;
+    padding: 0 8px;
+    overflow: hidden;
+}
+
+#logo-avis {
+    height: 73px;
+    width: auto;
+    display: block;
+}
+
+#titolo-scheda {
+    color: var(--avis-blue);
+    font-size: clamp(1.1rem, 3.5vw, 1.9rem);
+    font-weight: 700;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+#nome-scuola {
+	height: 56px;	/* dimensione limite imposta dall'immagine originaria */
+    width: auto;
+    display: block;
+}
+
+/* =========================================================
+   MAIN CONTAINER
+   Occupa tutto lo spazio tra header e footer, NO scroll
+   Il SVG canvas è suo figlio diretto (position: absolute)
+   ========================================================= */
+#app-container {
+    position: relative;          /* ← il canvas SVG si posiziona rispetto a lui */
+    flex: 1 1 auto;              /* occupa tutto lo spazio disponibile */
+    overflow: hidden;            /* nessun scroll */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 16px;
+    min-height: 0;               /* fondamentale per flexbox con overflow:hidden */
+}
+
+/* =========================================================
+   CANVAS SVG PER LE LINEE DI COLLEGAMENTO
+   ========================================================= */
+#lines-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;        /* I click passano attraverso */
+    z-index: 10;
+    overflow: visible;
+}
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
+#main-footer {
+    flex-shrink: 0;
+    height: var(--footer-h);
+    background-color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 16px;
+    border-top: 2px solid #d0d0d0;
+    z-index: 20;
+}
+#footer-center {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+}
+
+#app-version {
+    font-size: 0.62rem;
+    color: #888;
+    user-select: none;
+    pointer-events: none;
+    letter-spacing: 0.3px;
+}
+#progress-bar {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--avis-blue);
+}
+
+.btn-nav {
+    background-color: var(--avis-blue);
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    font-size: 1rem;
+    font-weight: 700;
+    border-radius: 10px;
+    cursor: pointer;
+    min-width: 110px;
+    /* Garantisce area di tocco confortevole su tablet */
+    min-height: 44px;
+    transition: background-color 0.2s, transform 0.1s;
+}
+
+.btn-nav:active {
+    transform: scale(0.96);
+}
+
+.btn-nav:disabled {
+    background-color: #b0b0b0;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+/* Animazione pulsante quando si sblocca */
+.pulse-btn {
+    animation: pulseGreen 1.5s infinite;
+}
+
+@keyframes pulseGreen {
+    0%   { box-shadow: 0 0 0 0 rgba(76,175,80,0.5); background-color: var(--success-green); }
+    70%  { box-shadow: 0 0 0 10px rgba(76,175,80,0); background-color: var(--success-green); }
+    100% { box-shadow: 0 0 0 0 rgba(76,175,80,0); background-color: var(--success-green); }
+}
+
+/* =========================================================
+   COPERTINA
+   ========================================================= */
+.cover-container {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    width: 100%;
+    max-width: 700px;
+    padding: 20px;
+    /* Garantisce che non esca fuori dallo schermo */
+    max-height: 100%;
+    overflow: hidden;
+}
+
+.cover-subtitle {
+    font-size: clamp(1.2rem, 3vw, 2.2rem);
+    color: var(--avis-blue);
+    font-weight: 400;
+}
+
+.cover-title {
+    font-size: clamp(2.5rem, 7vw, 5rem);
+    color: var(--avis-red);
+    text-transform: uppercase;
+    letter-spacing: 4px;
+    text-shadow: 3px 3px 0px rgba(0,0,0,0.1);
+    line-height: 1.1;
+}
+
+#input-nome {
+    display: block;
+    padding: 14px 18px;
+    font-size: 1.1rem;
+    border-radius: 10px;
+    border: 2px solid var(--avis-blue);
+    width: min(300px, 85vw);
+    text-align: center;
+    /* Permette la scrittura (e quindi la selezione del testo nell'input) */
+    -webkit-user-select: text;
+    user-select: text;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+#input-nome:focus {
+    border-color: var(--avis-red);
+}
+
+.btn-start {
+    background-color: var(--success-green);
+    color: white;
+    font-size: clamp(1.1rem, 2.5vw, 1.8rem);
+    font-weight: 700;
+    padding: 16px 44px;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    box-shadow: 0 8px 18px rgba(0,0,0,0.18);
+    animation: pulseStart 2s infinite;
+    transition: transform 0.2s;
+    min-height: 56px;
+}
+
+.btn-start:active {
+    transform: scale(0.95);
+}
+
+@keyframes pulseStart {
+    0%   { transform: scale(1);    box-shadow: 0 8px 18px rgba(0,0,0,0.18); }
+    50%  { transform: scale(1.04); box-shadow: 0 14px 28px rgba(76,175,80,0.35); }
+    100% { transform: scale(1);    box-shadow: 0 8px 18px rgba(0,0,0,0.18); }
+}
+
+/* =========================================================
+   LAYOUT SCHEDE TESTO-TESTO
+   Due colonne affiancate su tablet, verticale su mobile
+   ========================================================= */
+.layout-testo-testo {
+    display: flex;
+    width: 100%;
+    max-width: 1100px;
+    gap: 32px;
+    /* Occupa tutto lo spazio disponibile senza sforare */
+    height: 100%;
+    align-items: stretch;
+    z-index: 1;              /* Sta sopra il canvas (z-index 10 per il canvas, ma pointer-events:none) */
+}
+
+.colonna-domande,
+.colonna-risposte {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0;                  /* Nessun gap fisso: usiamo justify-content */
+    justify-content: space-evenly;
+    height: 100%;
+    min-height: 0;
+}
+
+/* --- CARD ITEM (base) --- */
+.card-item {
+    background-color: white;
+    border: 2px solid var(--avis-blue);
+    border-radius: 12px;
+    padding: 14px 16px;
+    font-size: clamp(0.8rem, 1.6vw, 1.1rem);
+    font-weight: 600;
+    text-align: left;
+    cursor: pointer;
+    box-shadow: 0 3px 7px rgba(0,0,0,0.08);
+    transition: transform 0.1s, background-color 0.25s, border-color 0.25s;
+    /* Garantisce leggibilità testo lungo */
+    line-height: 1.35;
+    /* Area minima di tocco comoda */
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+	white-space: normal;       /* aggiungi — permette il testo a capo */
+    word-break: break-word;    /* aggiungi — gestisce parole lunghe */
+}
+
+.card-item:active {
+    transform: scale(0.97);
+}
+
+/* Stile specifico domande (bordo pieno) */
+.domanda-item {
+    border-style: solid;
+    background-color: white;
+}
+
+/* Stile specifico risposte (bordo tratteggiato + sfondo azzurrino) */
+.risposta-item {
+    border-style: dashed;
+    background-color: #f0f7ff;
+}
+
+/* --- STATI INTERAZIONE --- */
+.card-item.selected {
+    background-color: #fff3cd;
+    border-color: #ffc107;
+    border-style: solid;
+    box-shadow: 0 0 0 3px rgba(255,193,7,0.35);
+}
+
+.card-item.correct {
+    background-color: var(--success-green);
+    color: white;
+    border-color: var(--success-green);
+    border-style: solid;
+    pointer-events: none;
+    cursor: default;
+}
+
+.card-item.error {
+    background-color: var(--avis-red);
+    color: white;
+    border-color: var(--avis-red);
+    border-style: solid;
+    animation: shake 0.4s ease-in-out;
+}
+
+@keyframes shake {
+    0%   { transform: translateX(0); }
+    20%  { transform: translateX(-6px); }
+    40%  { transform: translateX(6px); }
+    60%  { transform: translateX(-4px); }
+    80%  { transform: translateX(4px); }
+    100% { transform: translateX(0); }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* =========================================================
+   SCHERMATA FINALE DI RIEPILOGO
+   ========================================================= */
+.riepilogo-container {
+    background: white;
+    padding: 24px 28px;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+    width: min(680px, 96%);
+    max-height: 100%;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+    animation: fadeIn 0.4s ease;
+    /* Scrollbar su overflow */
+    -webkit-overflow-scrolling: touch;
+}
+
+.riepilogo-title {
+    font-size: clamp(1.6rem, 4vw, 2.4rem);
+    color: var(--avis-red);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    text-align: center;
+    line-height: 1.1;
+}
+
+.riepilogo-subtitle {
+    font-size: clamp(0.9rem, 1.8vw, 1.1rem);
+    color: var(--text-dark);
+    text-align: center;
+}
+
+.riepilogo-counters {
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+    background: var(--bg-light);
+    padding: 12px 24px;
+    border-radius: 12px;
+    border: 2px solid var(--avis-blue);
+    width: 100%;
+}
+
+.counter-box {
+    text-align: center;
+    flex: 1;
+}
+
+.counter-label {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--text-dark);
+}
+
+.counter-value {
+    font-size: clamp(1.8rem, 4vw, 2.4rem);
+    font-weight: 700;
+    line-height: 1.1;
+}
+
+.riepilogo-list {
+    width: 100%;
+}
+
+.riepilogo-scheda {
+    background: #f8f9fa;
+    margin-bottom: 6px;
+    padding: 9px 14px;
+    border-radius: 9px;
+    border-left: 6px solid var(--success-green);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+}
+
+.riepilogo-scheda.has-errors {
+    border-left-color: var(--avis-red);
+}
+
+.riepilogo-scheda-title {
+    color: var(--avis-blue);
+    font-size: 0.95rem;
+    font-weight: 700;
+    flex: 1;
+}
+
+.riepilogo-scheda-stats {
+    font-size: 0.88rem;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+/* =========================================================
+   LAYOUT SCHEDE TESTO-IMMAGINE (cuore / circolazione)
+   ========================================================= */
+
+.layout-text-image {
+    display: flex;
+    width: 100%;
+    max-width: 1200px;
+    height: 100%;
+    gap: 24px;
+    align-items: stretch;
+    z-index: 1;
+}
+
+.colonna-domande-img {
+    flex: 0 0 25%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    height: 100%;
+    min-height: 0;
+}
+
+.domanda-img-item {
+    display: flex !important;
+    align-items: center;
+    gap: 10px;
+    text-align: left;
+    justify-content: flex-start !important;
+}
+
+.domanda-num {
+    flex-shrink: 0;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background-color: var(--avis-blue);
+    color: white;
+    font-size: 0.85rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.domanda-img-item.correct .domanda-num {
+    background-color: white;
+    color: var(--success-green);
+}
+
+.domanda-img-item.error-img {
+    background-color: var(--avis-red);
+    color: white;
+    border-color: var(--avis-red);
+    border-style: solid;
+    animation: shake 0.4s ease-in-out;
+}
+
+.domanda-img-item.error-img .domanda-num {
+    background-color: white;
+    color: var(--avis-red);
+}
+
+.colonna-immagine {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 0;
+    min-width: 0;
+    padding: 8px;
+}
+
+/*
+   img-wrapper: ha position:relative e dimensioni ESATTE dell'immagine
+   visualizzata (impostate da JS dopo il caricamento).
+   Gli hotspot in % si posizionano sempre correttamente.
+*/
+.img-wrapper {
+    position: relative;
+    display: block;
+    line-height: 0;
+    /* Le dimensioni vengono impostate da JS via style.width/height */
+}
+
+.anatomia-img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+}
+
+/* Hotspot invisibile sovrapposto all'immagine, posizionato in % */
+.hotspot-zone {
+    position: absolute;
+    cursor: pointer;
+    border-radius: 8px;
+    background: transparent;
+    min-width: 44px;
+    min-height: 44px;
+    transition: background 0.15s;
+    z-index: 5;
+}
+
+/* Feedback hover leggero — aiuta a capire dove toccare */
+.hotspot-zone:hover {
+    background: rgba(255, 255, 255, 0.15);
+}
+
+/* Hotspot abbinato correttamente: overlay verde */
+.hotspot-zone.correct {
+    background: rgba(76, 175, 80, 0.28);
+    border: 2px solid rgba(76, 175, 80, 0.7);
+    pointer-events: none;
+    cursor: default;
+}
+/* Rettangolo visibile — cuore */
+.hotspot-zone.hotspot-rect-visible {
+    background: transparent;
+    border: 3px solid var(--hs-color, #0055CC);
+    box-shadow: 0 0 0 2px rgba(255,255,255,0.6);
+    animation: hotspotPulse 2s ease-in-out infinite;
+}
+
+.hotspot-zone.hotspot-rect-visible:hover {
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.hotspot-zone.hotspot-rect-visible.correct {
+    background: rgba(76, 175, 80, 0.22);
+    border-color: var(--success-green);
+    box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.5);
+    animation: none;
+    pointer-events: none;
+}
+
+/* =========================================================
+   EFFETTO LIVELLO SUPERATO
+   ========================================================= */
+#level-complete-overlay {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.45);
+    z-index: 1000;
+    animation: levelOverlayIn 0.35s ease-out;
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
+}
+
+#level-complete-overlay.level-complete-fade-out {
+    animation: levelOverlayOut 0.4s ease-in forwards;
+}
+
+.level-complete-box {
+    background: white;
+    border-radius: 24px;
+    padding: 40px 60px;
+    text-align: center;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    border-top: 8px solid var(--success-green);
+    animation: levelBoxIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+.level-complete-emoji {
+    font-size: clamp(3rem, 8vw, 5rem);
+    line-height: 1;
+    animation: levelEmojiBounce 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.15s both;
+}
+
+.level-complete-text {
+    font-size: clamp(1.8rem, 5vw, 3rem);
+    font-weight: 900;
+    color: var(--success-green);
+    letter-spacing: 1px;
+    line-height: 1.1;
+}
+
+.level-complete-sub {
+    font-size: clamp(0.9rem, 2vw, 1.2rem);
+    color: var(--avis-blue);
+    font-weight: 600;
+    margin-top: 4px;
+}
+
+@keyframes levelOverlayIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+@keyframes levelOverlayOut {
+    from { opacity: 1; }
+    to   { opacity: 0; }
+}
+
+@keyframes levelBoxIn {
+    from { transform: scale(0.5); opacity: 0; }
+    to   { transform: scale(1);   opacity: 1; }
+}
+
+@keyframes levelEmojiBounce {
+    from { transform: scale(0) rotate(-15deg); }
+    to   { transform: scale(1) rotate(0deg); }
+}
+
+/* Hotspot circolare VISIBILE (circolazione) — pulsa per invitare al tocco */
+.hotspot-zone.hotspot-circle {
+    /*background: var(--hs-color, #CC0000);*/
+    border: 3px solid white;
+    box-shadow:
+        0 0 0 3px var(--hs-color, #CC0000),
+        0 4px 12px rgba(0,0,0,0.3);
+    opacity: 0.9;
+    animation: hotspotPulse 2s ease-in-out infinite;
+}
+
+.hotspot-zone.hotspot-circle:hover {
+    background: var(--hs-color, #CC0000);
+    opacity: 1;
+    transform: scale(1.15);
+    transition: transform 0.15s, opacity 0.15s;
+}
+
+/* Quando abbinato correttamente: smette di pulsare, resta colorato */
+.hotspot-zone.hotspot-circle.correct {
+    background: var(--success-green);
+    border-color: white;
+    box-shadow: 0 0 0 3px var(--success-green), 0 4px 12px rgba(0,0,0,0.2);
+    animation: none;
+    opacity: 1;
+}
+
+@keyframes hotspotPulse {
+    0%   { box-shadow: 0 0 0 3px var(--hs-color, #CC0000), 0 4px 12px rgba(0,0,0,0.3); }
+    50%  { box-shadow: 0 0 0 8px rgba(0,0,0,0),            0 4px 12px rgba(0,0,0,0.3); }
+    100% { box-shadow: 0 0 0 3px var(--hs-color, #CC0000), 0 4px 12px rgba(0,0,0,0.3); }
+}
+
+/* =========================================================
+   TABLET: layout a colonne — nessun scroll
+   ========================================================= */
+
+/* Tablet portrait (768×1024 tipico) */
+@media (max-width: 900px) {
+    :root {
+        --header-h: 72px;
+        --footer-h: 58px;
+    }
+    #logo-avis {
+        height: 68px;
+    }
+	#titolo-scheda {
+		font-size: clamp(1rem, 3vw, 1.5rem);
+	}
+	#nome-scuola {
+		height: 48px;
+	}
+    .layout-testo-testo {
+        gap: 20px;
+    }
+    .card-item {
+        padding: 10px 12px;
+    }
+}
+
+/* Telefoni e tablet molto piccoli: layout verticale */
+@media (max-width: 650px) {
+    :root {
+        --header-h: 54px;
+        --footer-h: 54px;
+    }
+	#titolo-scheda {
+		font-size: clamp(1.2rem, 3vw, 1.5rem);
+	}
+	/* nascondo i loghi tanto non ci entrerebbero */
+    #logo-avis {
+        height: 38px;
+    }
+	.logo-right {
+        display: none;
+    }
+    .title-container {
+        text-align: center;
+        padding: 0;
+    }
+
+    #app-container {
+        padding: 10px;
+        align-items: flex-start;
+        overflow-y: auto;          /* Qui permettiamo scroll solo se il contenuto è verticale */
+    }
+
+    .layout-testo-testo {
+        flex-direction: column;
+        height: auto;
+        gap: 14px;
+    }
+
+    .colonna-domande,
+    .colonna-risposte {
+        height: auto;
+        justify-content: flex-start;
+        gap: 8px;
+    }
+
+    .card-item {
+        font-size: 0.88rem;
+        padding: 10px 12px;
+    }
+
+    .btn-nav {
+        padding: 10px 16px;
+        font-size: 0.9rem;
+        min-width: 90px;
+    }
+
+    #progress-bar {
+        font-size: 0.85rem;
+    }
+}
+/* =========================================================
+   MODAL INSTALLAZIONE PWA
+   ========================================================= */
+#install-modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.55);
+    z-index: 2000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    animation: modalOverlayIn 0.3s ease;
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+}
+
+#install-modal.install-modal-hide {
+    animation: modalOverlayOut 0.35s ease forwards;
+}
+
+#install-modal-box {
+    background: white;
+    border-radius: 20px;
+    width: min(480px, 92vw);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+    overflow: hidden;
+    animation: modalBoxIn 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+#install-modal-header {
+    background: var(--avis-blue);
+    color: white;
+    padding: 22px 24px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+#install-modal-icon {
+    font-size: 2.2rem;
+    flex-shrink: 0;
+}
+
+#install-modal-title {
+    font-size: 1.25rem;
+    font-weight: 800;
+    margin-bottom: 2px;
+    color: white;
+}
+
+#install-modal-sub {
+    font-size: 0.85rem;
+    opacity: 0.88;
+    color: white;
+    margin: 0;
+}
+
+#install-modal-body {
+    padding: 22px 24px 16px;
+}
+
+.install-steps {
+    padding-left: 20px;
+    margin: 0 0 12px;
+}
+
+.install-steps li {
+    font-size: 0.95rem;
+    padding: 6px 0;
+    color: var(--text-dark);
+    line-height: 1.45;
+}
+
+.install-note {
+    font-size: 0.82rem;
+    color: #e68900;
+    margin: 8px 0 0;
+    padding: 8px 12px;
+    background: #fff8e1;
+    border-radius: 8px;
+    border-left: 3px solid #e68900;
+}
+
+#install-modal-actions {
+    padding: 0 24px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.install-modal-primary {
+    background: var(--avis-blue);
+    color: white;
+    border: none;
+    padding: 14px;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    width: 100%;
+    transition: opacity 0.2s;
+}
+
+.install-modal-primary:active { opacity: 0.85; }
+
+.install-modal-secondary {
+    background: none;
+    border: 1.5px solid var(--border, #d0d0d0);
+    color: var(--gray, #666);
+    padding: 11px;
+    border-radius: 12px;
+    font-size: 0.88rem;
+    cursor: pointer;
+    width: 100%;
+    transition: background 0.15s;
+}
+
+.install-modal-secondary:hover { background: #f5f5f5; }
+
+@keyframes modalOverlayIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+@keyframes modalOverlayOut {
+    from { opacity: 1; }
+    to   { opacity: 0; }
+}
+
+@keyframes modalBoxIn {
+    from { transform: scale(0.85); opacity: 0; }
+    to   { transform: scale(1);    opacity: 1; }
+}
